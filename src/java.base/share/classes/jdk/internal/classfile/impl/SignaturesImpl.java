@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2022, 2023, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -45,12 +45,12 @@ public final class SignaturesImpl {
         this.sig = signature;
         sigp = 0;
         List<TypeParam> typeParamTypes = parseParamTypes();
-        RefTypeSig superclass = referenceTypeSig();
-        ArrayList<RefTypeSig> superinterfaces = null;
+        ClassTypeSig superclass = classTypeSig();
+        ArrayList<ClassTypeSig> superinterfaces = null;
         while (sigp < sig.length()) {
             if (superinterfaces == null)
                 superinterfaces = new ArrayList<>();
-            superinterfaces.add(referenceTypeSig());
+            superinterfaces.add(classTypeSig());
         }
         return new ClassSignatureImpl(typeParamTypes, superclass, null2Empty(superinterfaces));
     }
@@ -172,6 +172,14 @@ public final class SignaturesImpl {
         }
     }
 
+    private ClassTypeSig classTypeSig() {
+        var t = typeSig();
+        if (t instanceof ClassTypeSig cts)
+            return cts;
+        else
+            throw new IllegalArgumentException("not a valid type signature: " + sig);
+    }
+
     public static record BaseTypeSigImpl(char baseType) implements Signature.BaseTypeSig {
 
         @Override
@@ -256,8 +264,8 @@ public final class SignaturesImpl {
         return sb;
     }
 
-    public static record ClassSignatureImpl(List<TypeParam> typeParameters, RefTypeSig superclassSignature,
-            List<RefTypeSig> superinterfaceSignatures) implements ClassSignature {
+    public static record ClassSignatureImpl(List<TypeParam> typeParameters, ClassTypeSig superclassSignature,
+            List<ClassTypeSig> superinterfaceSignatures) implements ClassSignature {
 
         @Override
         public String signatureString() {
