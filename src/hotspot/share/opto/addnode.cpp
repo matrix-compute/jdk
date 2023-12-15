@@ -812,8 +812,8 @@ Node* OrINode::Ideal(PhaseGVN* phase, bool can_reshape) {
   // Convert "~a | ~b" into "~(a & b)"
   if (is_not(phase, in(1), T_INT) && is_not(phase, in(2), T_INT)) {
     return make_not(phase,
-		    phase->transform(new AndINode(in(1)->in(1), in(2)->in(1))),
-		    T_INT);
+                    phase->transform(new AndINode(in(1)->in(1), in(2)->in(1))),
+                    T_INT);
   }
   return nullptr;
 }
@@ -885,8 +885,8 @@ Node* OrLNode::Ideal(PhaseGVN* phase, bool can_reshape) {
   // Convert "~a | ~b" into "~(a & b)"
   if (is_not(phase, in(1), T_LONG) && is_not(phase, in(2), T_LONG)) {
     return make_not(phase,
-		    phase->transform(new AndLNode(in(1)->in(1), in(2)->in(1))),
-		    T_LONG);
+                    phase->transform(new AndLNode(in(1)->in(1), in(2)->in(1))),
+                    T_LONG);
   }
 
   return nullptr;
